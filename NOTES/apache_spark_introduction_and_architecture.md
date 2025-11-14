@@ -127,3 +127,95 @@ This flow ensures distributed, parallel processing of data within a Spark cluste
 
 <img width="1865" height="868" alt="Screenshot 2025-11-13 103925" src="https://github.com/user-attachments/assets/a385b375-e132-47fb-9e7b-416aaf05178b" />
 
+# Official Documentation
+https://spark.apache.org/docs/latest/cluster-overview.html
+
+# Pictorial Representation from Offical Documentation.
+
+<img width="1704" height="1043" alt="offical documentation Arthitecture" src="https://github.com/user-attachments/assets/872b3ded-d552-4410-9964-607c6aba3a59" />
+
+---
+# What is Spark Context?
+
+- **Spark Context** is the **starting point** of Spark.
+- It connects the **Driver Node** with the **Cluster Manager**.
+- Whenever Spark code is submitted by the programmer, it reaches the Cluster Manager.  
+  After that, the Cluster Manager creates the Driver Node.  
+  At that time, the Driver Node has the **Spark Context**, through which the connection between the Driver Node and Cluster Manager is established.
+- Nowadays, **Spark Context is wrapped inside `SparkSession`**.
+
+## What is the difference between Worker Node and Executors?
+
+- **Worker Node** is a **machine**.
+- On that machine, we can create **Executors** (executor will execute the work).
+
+---
+
+## Resource Manager / Cluster Manager available in the market
+
+- Spark's own **Standalone Cluster Manager**
+- **Mesos**
+- **YARN**
+- **Kubernetes**
+
+  
+# Driver Node
+
+- When a node is chosen as a **Driver Node**, the Resource / Cluster Manager **creates or installs the Application Master Container** on that Driver Node.
+- The **Application Master Container** is responsible for all orchestration and driver program activities.
+
+---
+
+## Components inside the Application Master Container
+
+### 1. PYSPARK MAIN
+- PYSPARK MAIN is optional because it is required only when we write Spark code using **PySpark**.
+- Spark code is originally written in **Scala**, so Scala applications do not require PYSPARK MAIN.
+- PYSPARK MAIN is also called the **"PySpark Driver"**.
+
+---
+
+### 2. JVM MAIN
+- JVM MAIN interprets or compiles the **Scala code**.
+- JVM MAIN is also called the **"Application Driver"**.
+
+---
+
+### 3. Py4J Process
+- The **Py4J Process** converts any PySpark code in the Spark application into calls that can be executed by **JVM MAIN**.
+
+---
+## Driver Node Pictorial Representation
+
+<img width="1510" height="863" alt="Driver Node" src="https://github.com/user-attachments/assets/68d66896-6a72-4733-8ab1-2325e92116b8" />
+
+
+## Code Flow
+We write Spark code → On top of it Java or Scala wrapper → On top of that Python wrapper
+
+
+Python Wrapper
+|
+Java Wrapper
+|
+Spark Code
+---
+
+# Worker Node
+
+- A **Worker Node** has only the **JVM installed** because Worker Nodes run **Executors**, which execute the work assigned by the Driver Node.
+- **Python** is also installed for certain special cases:
+  - **User-Defined Functions (UDFs):**  
+    Although PySpark has many built-in functions, sometimes we write our own UDFs.  
+    In such cases, Python is required to interpret and execute those user-defined functions.
+
+---
+
+## Modern Trend
+
+- Nowadays, **JVM-based executors are being replaced by C++-based executors**, because C++ executors are much faster. This is planning state.
+- **C++ executors** process your code **natively**, providing better performance than JVM.
+  
+## Worker Node Pictorial Representation
+
+<img width="1477" height="930" alt="Worker Node" src="https://github.com/user-attachments/assets/6e1366c6-80a2-4e65-892b-0c70f13f662a" />
